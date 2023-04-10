@@ -41,20 +41,22 @@ export default class ImageGallery extends Component {
         }
         if (prevState.page !== this.state.page) {
             this.setState({ status: 'pending' });
-            fetch(`https://pixabay.com/api/?q=${this.props.searchQuery}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`)
+
+                fetch(`https://pixabay.com/api/?q=${this.props.searchQuery}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`)
                 .then(response =>
                     response.json()
                 )
                 .then(data => {
                     if (data.hits.length === 0) { return Promise.reject(new Error(`Нет картинок по запросу ${this.props.searchQuery}`)) } else {
                         const images = data.hits.map(({ id, webformatURL, largeImageURL }) => ({
-                        id,
-                        webformatURL,
-                        largeImageURL,
-                    }));
-                    this.setState({ images: [...this.state.images, ...images], status: 'resolved' });
-                }
+                            id,
+                            webformatURL,
+                            largeImageURL,
+                        }));
+                        this.setState({ images: [...this.state.images, ...images], status: 'resolved' });
+                    }
                 }).catch(error => this.setState({ error, status: 'rejected' }))
+
         }
     }
 
@@ -84,23 +86,8 @@ export default class ImageGallery extends Component {
         render() {
             const { images, error, status, modal, largeImageURL, totalPages } = this.state;
             const showButton = totalPages > this.state.page && status === 'resolved';
-        
-            if (status === 'idle') {
-                return <div className={css.ImageGallery}>
-                    <p>Enter your request</p>
-                </div>
-            }
-
-            if (status === 'pending') {
-                return <Loader />
-            }
-
-            if (status === 'rejected') {
-                return <h1>{error.message}</h1>
-            }
-
-            if (status === 'resolved') {
-                return (
+            
+            return (
                     <div>
                         <ul className={css.ImageGallery}>
                             {images.map((image) => (
@@ -112,12 +99,14 @@ export default class ImageGallery extends Component {
                                 />
                             ))}
                         </ul>
-                        {showButton && <Button onClick={this.handleLoadMore} />}
-                        {modal && <Modal onClose={this.onModalClose} largeImageURL={largeImageURL} />}
+                    {status === 'pending' && <Loader />}
+                    {status === 'idle' && <h1>Enter your request</h1>}
+                    {status === 'rejected' && <h1>{error.message}</h1>}
+                    {showButton && <Button onClick={this.handleLoadMore} />}
+                    {modal && <Modal onClose={this.onModalClose} largeImageURL={largeImageURL} />}
                     </div>
-
-                );
-            }
+            
+            );  
         }
     }
 
