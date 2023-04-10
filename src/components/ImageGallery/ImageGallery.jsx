@@ -39,7 +39,7 @@ export default class ImageGallery extends Component {
                 }
                 }).catch(error => this.setState({ error, status: 'rejected' }))
         }
-        if (prevState.page !== this.state.page) {
+        if (prevState.page !== this.state.page && this.state.page <= this.state.totalPages) {
             this.setState({ status: 'pending' });
 
                 fetch(`https://pixabay.com/api/?q=${this.props.searchQuery}&page=${this.state.page}&key=${API_KEY}&image_type=photo&orientation=horizontal&per_page=12`)
