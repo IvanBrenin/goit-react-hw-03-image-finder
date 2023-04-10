@@ -12,17 +12,16 @@ class App extends Component {
   };
 
 
-
-
   handleSearchFormSubmit = (searchQuery) => {
     this.setState({ searchQuery });
   }
+
 
   render() {
     return (
       <div className={css.App}>
         <SearchBar onSubmit={this.handleSearchFormSubmit} />
-        <ImageGallery searchQuery={this.state.searchQuery} />
+        <ImageGallery searchQuery={this.state.searchQuery} page = {this.state.page} handleLoadMore={this.handleLoadMore} />
       </div>
        )
 

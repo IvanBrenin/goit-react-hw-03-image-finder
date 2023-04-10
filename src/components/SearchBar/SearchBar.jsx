@@ -23,6 +23,7 @@ export default class SearchBar extends Component {
 
     }
 
+
     render() {
         return (
             <header className={css.Searchbar}>
@@ -37,8 +38,9 @@ export default class SearchBar extends Component {
                         type="text"
                         autoComplete="off"
                         autoFocus
+                        value={this.state.searchQuery}
+                        onChange={this.handleSearchQueryChange}
                         placeholder="Search images and photos"
-                        onChange = {this.handleSearchQueryChange}
                     />
                 </form>
             </header>
